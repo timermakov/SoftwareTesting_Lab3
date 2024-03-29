@@ -15,7 +15,7 @@ public class ImgurTest {
     }
 
     @Test
-    void testDriver() {
+    void driverTest() {
         Utils.getDrivers().forEach(this::execute);
     }
 

@@ -7,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.timermakov.Utils;
 import org.timermakov.page.MainPage;
-import org.timermakov.page.PostPage;
 import java.time.Duration;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,12 +19,11 @@ public class CategoryTest {
     }
 
     @Test
-    public void testCategory() {
+    public void categoryTest() {
         List<WebDriver> drivers = Utils.getDrivers();
         drivers.parallelStream().forEach(webDriver -> {
             webDriver.manage().window().maximize();
             MainPage mainPage = new MainPage(webDriver);
-            PostPage postPage = new PostPage(webDriver);
             webDriver.get(Utils.BASE_URL);
             String postId = mainPage.goToCategory();
             webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));

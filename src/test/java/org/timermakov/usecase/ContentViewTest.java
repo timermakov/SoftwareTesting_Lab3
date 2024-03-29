@@ -20,7 +20,7 @@ public class ContentViewTest {
     }
 
     @Test
-    public void testNavigation() {
+    public void navigationTest() {
         List<WebDriver> drivers = Utils.getDrivers();
         drivers.parallelStream().forEach(webDriver -> {
             webDriver.manage().window().maximize();

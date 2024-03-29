@@ -20,11 +20,11 @@ public class MainPage extends Page {
         super(driver);
     }
 
-    public void doLogin() {
+    public void doLogin() throws InterruptedException {
         tryLogin(CORRECT_USERNAME, CORRECT_PASSWORD);
     }
 
-    public void doWrongLogin() {
+    public void doWrongLogin() throws InterruptedException {
         tryLogin(CORRECT_USERNAME, Utils.WRONG_PASSWORD);
     }
 
@@ -34,10 +34,7 @@ public class MainPage extends Page {
         WebElement signOut = Utils.getElementBySelector(driver, By.xpath("//img[@class='sign-out']"));
         signOut.click();
         //Utils.waitUntilPageLoads(driver, Duration.ofSeconds(10));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));        
-
-        WebElement submitButton = Utils.getElementBySelector(driver, By.xpath("//button[@type='submit']"));
-        submitButton.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     public void doBasicSearch() {
@@ -58,8 +55,7 @@ public class MainPage extends Page {
         post.click();
         String postUrl = driver.getCurrentUrl();
         String[] parts = postUrl.split("/gallery/");
-        String postId = parts[1];
-        return postId;
+        return parts[1];
     }
 
     public String goToCategory() {
@@ -95,7 +91,7 @@ public class MainPage extends Page {
     }
 
 
-    private void tryLogin(CharSequence login, CharSequence password) {
+    private void tryLogin(CharSequence login, CharSequence password) throws InterruptedException {
         //WebElement consent = Utils.getElementBySelector(driver, By.xpath("//button[@class='fc-button fc-cta-consent fc-primary-button']"));
         //if (consent != null) consent.click();
         
@@ -112,13 +108,16 @@ public class MainPage extends Page {
         WebElement authButton = Utils.getElementBySelector(driver, By.xpath("//button[@name='submit']"));
         
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        //Utils.waitUntilPageLoads(driver, Duration.ofSeconds(5));
-        
+
         usernameInput.sendKeys(login);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        //Utils.waitUntilPageLoads(driver, Duration.ofSeconds(5));
         passwordInput.sendKeys(password);
         authButton.click();
+
+        String errorText = Utils.getElementBySelector(driver, By.xpath("//p[@class='error']")).getText();
+        if (errorText.equals("Please fill out a captcha.")) {
+            Thread.sleep(30000);
+        }
     }
 }
 

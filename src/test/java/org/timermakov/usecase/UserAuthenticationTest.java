@@ -3,7 +3,6 @@ package org.timermakov.usecase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.timermakov.Utils;
@@ -13,8 +12,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 public class UserAuthenticationTest {
 
     @BeforeAll
@@ -30,7 +27,11 @@ public class UserAuthenticationTest {
             MainPage mainPage = new MainPage(webDriver);
             webDriver.get(Utils.BASE_URL);
             webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-            mainPage.doLogin();
+            try {
+                mainPage.doLogin();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             WebElement username = Utils.getElementBySelector(webDriver, By.xpath("//div[@class='Dropdown NavbarUserMenu']//div[@class='Dropdown-title']//span"));
             assertEquals(Utils.CORRECT_USERNAME, username.getText());
             webDriver.quit();
@@ -46,11 +47,18 @@ public class UserAuthenticationTest {
             MainPage mainPage = new MainPage(webDriver);
             webDriver.get(Utils.BASE_URL);
             webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-            mainPage.doLogin();
-            webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            try {
+                mainPage.doLogin();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
             mainPage.doLogout();
             webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-            assertEquals("Sign in", Utils.getElementBySelector(webDriver, By.xpath("//a[@class='Navbar-signin']")).getText());
+
+            String signOutText = Utils.getElementBySelector(webDriver, By.xpath("//*[@id=\"text-content\"]/h1")).getText();
+
+            assertEquals("You have been signed out", signOutText);
         });
         drivers.forEach(WebDriver::quit);
     }
@@ -62,8 +70,16 @@ public class UserAuthenticationTest {
             webDriver.manage().window().maximize();
             MainPage mainPage = new MainPage(webDriver);
             webDriver.get(Utils.BASE_URL);
-            mainPage.doWrongLogin();
-            assertThrows(TimeoutException.class, () -> Utils.getElementBySelector(webDriver, By.xpath("//div[@class='Dropdown NavbarUserMenu']//div[@class='Dropdown-title']//span")));
+            try {
+                mainPage.doWrongLogin();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+
+            String errorText = Utils.getElementBySelector(webDriver, By.xpath("//p[@class='error']")).getText();
+            assertEquals("Your login information was incorrect.", errorText);
         });
         drivers.forEach(WebDriver::quit);
     }
