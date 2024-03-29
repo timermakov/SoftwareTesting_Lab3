@@ -1,4 +1,4 @@
-package org.timermakov.model;
+package org.timermakov.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -9,7 +9,6 @@ import org.timermakov.Utils;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
 import java.time.Duration;
 
 import static org.timermakov.Utils.CORRECT_USERNAME;

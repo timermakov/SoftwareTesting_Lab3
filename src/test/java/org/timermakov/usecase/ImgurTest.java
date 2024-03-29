@@ -1,8 +1,9 @@
-package org.timermakov;
+package org.timermakov.usecase;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
+import org.timermakov.Utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,10 +16,10 @@ public class ImgurTest {
 
     @Test
     void testDriver() {
-        Utils.getDrivers().forEach(this::executeWithCapabilities);
+        Utils.getDrivers().forEach(this::execute);
     }
 
-    private void executeWithCapabilities(WebDriver driver) {
+    private void execute(WebDriver driver) {
         driver.get(Utils.BASE_URL);
         driver.manage().window().maximize();
 

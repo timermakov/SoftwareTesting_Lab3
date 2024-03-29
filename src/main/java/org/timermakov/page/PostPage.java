@@ -1,4 +1,4 @@
-package org.timermakov.model;
+package org.timermakov.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

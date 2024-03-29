@@ -7,7 +7,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.timermakov.Utils;
-import org.timermakov.model.MainPage;
+import org.timermakov.page.MainPage;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserAuthorizationTest {
+public class UserAuthenticationTest {
 
     @BeforeAll
     public static void prepareDrivers() {
